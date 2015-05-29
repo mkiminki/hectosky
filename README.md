@@ -60,6 +60,7 @@ strength in the nearest individual sky spectrum.
 ## Requirements
 
 * IRAF (available at http://iraf.noao.edu/)
+* The `hectospec` package for IRAF (available at http://tdc-www.harvard.edu/iraf/hectospec/)
 * MPFIT, an IDL-based curve fitting program created by Craig Markwardt (http://cow.physics.wisc.edu/~craigm/idl/fitting.html)
 
 ## Installation
