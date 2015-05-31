@@ -132,3 +132,164 @@ solved.  (I haven't had this problem with IRAF v2.16.)
 
 Once you have `calloned` working, edit
 `callhecto` and `callimutil` in the same way.  The Hectosky package is now ready to run.
+
+## Use
+
+#### Starting Hectosky
+
+Hectosky should be run from the directory with your reduced Hectospec data.  
+To start, enter IDL and execute
+
+`IDL$ hectosky,'PointingName'`
+
+(As before, `PointingName` is the name you gave to the Hectospec pointing.)
+
+Optionally, you can execute
+
+`IDL$ hectosky,'PointingName',/quick`
+
+to tell the program to proceed without stopping to review the sky subtraction
+of individual objects.  It will not be entirely automatic, as there is an
+interactive portion that cannot be skipped, but it will be faster.  I recommend
+not using the `quick` option on the first run through a data set; take advantage of 
+Hectosky's display features to get a feel for the sky subtraction quality.
+
+#### Where to save output
+
+By default, Hectosky saves sky-subtracted spectra to `PointingName.skysub/`.  
+If a directory with that name already exists in your working
+directory, Hectosky will ask
+
+```
+Sky-subtracted spectra already exist in PointingName.skysub/
+Replace it? (y/n)
+```
+A `y` answer will delete the contents of the existing folder in preparation
+for the new sky-subtracted files.  A `n` answer will prompt you for a new
+output folder name:
+
+`Enter new folder name for sky-subtracted results:`
+
+IMPORTANT: The folder name MUST end with a forward slash (`/`), e.g., `NewOutputFolder/`, 
+or the files won't save to the right place.
+
+#### Checking for existing sky data
+
+Hectosky begins by checking for 1D sky offset spectra.  E-SPECROAD
+splits the multispec object file into 1D spectra, but not the skies,
+so Hectosky will do the splitting if needed.  An xgterm window will
+open and print its progress (this takes maybe 10 seconds).  There is
+no user input during this process.
+
+Before calling GetGoodSky to screen for usable sky spectra, 
+Hectosky checks if the list
+`PointingName.good_sky_data.txt` already exists in your current directory.  This
+allows you to skip the time-consuming process of screening the sky
+fibers if you've already done it satisfactorily once.  If the file
+exists, you will be asked
+
+`List of good sky spectra detected.  Use this? (y/n)`
+
+A `y` answer tells Hectosky to skip calling GetGoodSky and use the 
+information from the existing file instead.  A `n` answer deletes the 
+existing file, to be replaced by a new list of workable sky spectra.
+
+Similarly, if there is already a master sky named `PointingName.mastersky.fits`
+in your working directory, Hectosky will ask
+
+`Master sky file detected.  Use this? (y/n)`
+
+Again, if you answer `n`, the existing file will be deleted.
+
+#### GetGoodSky
+
+Hectosky calls its companion program, GetGoodSky, to check the
+sky fibers and screen out ones that cannot be used (e.g., because they
+landed on a star or have a cosmic ray on top of a nebular line).
+GetGoodSky loops over all the sky fibers (all the fibers from a sky
+offset pointing *plus* the dedicated sky fibers from the science
+pointing) and uses MPFIT to fit the H&alpha; emission line with a
+Gaussian.
+
+GetGoodSky will halt and ask for user input if it encounters sky
+spectra with one or more of the following properties:
+
+1. A continuum level (default between 5150 and 5400 &#x212b;) more than 2&sigma; 
+above the median.  This often signals a sky contaminated by
+stellar light.
+
+2. Central wavelength of the H&alpha; fit is more than 3&sigma; away
+from the median.  This can indicate the presence of a cosmic ray or
+other oddity in the H&alpha; line.
+
+3. For spectra taken with the 600 lpm grating, 
+a full width half max (FWHM) of the H&alpha; fit &ge; 3 &#x212b;.
+For spectra taken with the 270 lpm grating, a FWHM more than 1&sigma; away from the
+median.  This usually signals a poorly-fit H&alpha; line and is
+primarily of interest if you want reasonably accurate H&alpha;
+measurements in order to make an H&alpha; map.  If you don't care about
+the accuracy of the H&alpha; equivalent width measurements, you can
+mostly ignore this warning.
+
+4. A positive equivalent width, i.e., H&alpha; has been fit as an
+absorption line.  Usually these are clear stellar contaminants.
+
+(The means/medians/sigmas are calculated from all the sky spectrum from
+that pointing.)
+
+GetGoodSky will plot the full flagged spectrum with the Gaussian fit
+of H&alpha; overplot in red, print the reasons the spectrum was flagged
+to the termainal, and ask the user the following questions.  Questions must be
+answered with a `y` (for yes) or `n` (for no), followed by the `Enter` key.
+If you type in anything else and hit `Enter`, the program will repeat
+the question and otherwise do nothing.
+
+`Zoom in on H-alpha line? (y or n)`
+
+A `y` will replot the spectrum and the Gaussian fit between 6200 and
+6900 &#x212b;.  The dashed line shows where the center of the H&alpha; line is
+expected to be based on the mean of the fits to all the skies.
+A `n` will send you to the next question without replotting.  
+
+`Keep this spectrum as is? (y or n)`
+
+If, in your judgement, there is nothing wrong with the sky spectrum and you do not wish to
+refit the H&alpha; line, hit `y`.  GetGoodSky will consider this sky
+spectum usable and continue its loop over the skies.  A `n` response
+will send you to the next question.
+
+`Refit in SPLOT? (y or n)`
+
+If the sky spectrum is good but the Gaussian fit is poor (and you want
+to improve it), or if you want to be able to zoom in further on the
+spectrum before making a decision, hit `y`.  This will open an IRAF
+graph window with the sky spectrum plotted.  All SPLOT functions work
+as usual.  Use the 'd' key and subsequent prompts to fit the H&alpha;
+line.  You can repeat the fit as often as you like; GetGoodSky will
+take the last one.  
+
+When you're satisfied with your fit in SPLOT (or have decided that the
+spectrum is unusable), hit 'q' to hit SPLOT and return to the IDL
+terminal.  GetGoodSky will print the parameters of your fit and ask
+
+`Did you successfully fit the line? (y or n)`
+
+A `y` will mark the sky as usable and keep your fit; a `n` will mark
+the sky as unusable and move on.
+
+If you chose not to refit with SPLOT, you will be prompted with a
+final question:
+
+`Set EW to zero? (y or n)`
+
+This option exists for the few cases I have encountered where, within
+the noise, there is no H&alpha; line emission but the sky is still
+usuable for sky subtraction.  Answering `y` will
+mark the sky as usuable; `n` will mark the sky as unusable.
+
+When GetGoodSky has fit and checked all the sky spectra, it prints the
+list of usable skies to a file (`PointingName.good_sky_data.txt`) 
+and returns control to Hectosky.
+Hectosky then makes a median master sky out of the good sky fibers, scaling
+by exposure time where necessary.  The master sky is saved as 
+`PointingName.mastersky.fits`.
