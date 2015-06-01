@@ -417,3 +417,51 @@ the H&alpha; line is oversubtracted: the real line in the object is not
 as deep as it appears.  If there appear to be [NII] emission lines, the H&alpha; line
 is undersubtracted and you should be cautious about interpreting any
 apparent H&alpha; emission.  
+
+## Output
+
+* FITS files of sky-subtracted science spectra, saved to a folder (default 
+`PointingName.skysub/`) in the working directory.
+* FITS file of the master sky spectrum (`PointingName.mastersky.fits`) unless
+you chose to use a previously-existing master sky.
+* A text file with information on the usable sky fibers (`PointingName.good_sky_data.txt`).
+In addition to recording the sky fibers that went into the master sky, this file gives the
+equivalent width (EW), full width half max (FWHM), and central wavelength of the Gaussian fit
+to the H&alpha; line in each usable sky spectrum.  A description of each column 
+is given in the file header.
+
+## Variations
+
+There are three alternate versions of Hectosky: Hectosky_N2fix, Hectosky_Orion, and
+Hectosky_single.  
+
+**Hectosky_N2fix** fixes the
+wavelength of the [NII] &lambda; 6547 line during fitting.  Occasionally, 
+this line is clearly visible in the master sky, but the program has trouble fitting it.  Hectosky_N2fix corrects this problem and should be used in these cases.
+
+**Hectosky_Orion** is optimized for working with spectra from regions like
+the Orion Nebula, which have some strong nebular lines but minimal [NII]
+emission.  The spectra inHectosky_Orion are plotted so that the [SII]
+lines can be compared to H&alpha;.  Extra caution should be used when
+interpreting apparent H&alpha; emission features. 
+
+**Hectosky_single** does sky subtraction of a *single* fiber from a
+Hectospec pointing, allowing you to fiddle with the subtraction for 
+a particular object.  Sometimes, the difference in nebular line strength between the sky
+offset and the science spectrum is large enough that the nebular lines
+need to be scaled by some factor to improved sky subtraction.  
+Hectosky_single has extra input variables and is
+called by the command:
+
+`IDL$ hectosky_magic,'PointingName',aperture,scalefactor`
+
+where `aperture` is the fiber number of the object to be sky-subtracted from
+the pointing `PointingName`, and `scalefactor` is the value by which to
+scale the nebular line strengths.  e.g.,
+
+`IDL$ hectosky_magic,'W3_2011C_bright_1',135,1.3`
+
+It is recommended that you use Hectosky_single only (1) on particularly
+interesting sources, because it can get quite tedious, and (2)
+when you are comfortable with using the basic version of Hectosky and
+have a good feel for what "good" sky subtraction looks like.
