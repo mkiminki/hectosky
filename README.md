@@ -465,3 +465,9 @@ It is recommended that you use Hectosky_single only (1) on particularly
 interesting sources, because it can get quite tedious, and (2)
 when you are comfortable with using the basic version of Hectosky and
 have a good feel for what "good" sky subtraction looks like.
+
+## License
+
+Copyright 2012, 2015 Megan Kiminki
+
+Released under the terms of the MIT license.  See the `LICENSE` file for details.
