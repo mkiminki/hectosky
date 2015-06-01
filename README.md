@@ -1,6 +1,7 @@
 # HECTOSKY
 
-Sky subtraction routines for Hectospec observations.
+Routines for subtracting sky lines from Hectospec
+spectra, particularly in cases of strong background emission.
 
 ## Introduction
 
@@ -59,12 +60,12 @@ strength in the nearest individual sky spectrum.
 
 ## Requirements
 
-* IRAF (available at http://iraf.noao.edu/)
-* The `hectospec` package for IRAF (available at http://tdc-www.harvard.edu/iraf/hectospec/)
-* The `WCSTools` package for IRAF (available via ftp as described by http://tdc-www.harvard.edu/software/wcstools/iraf.install.html)
-
 * The IDL Astronomy User's Library (http://idlastro.gsfc.nasa.gov/)
 * MPFIT, an IDL-based curve fitting program created by Craig Markwardt (http://cow.physics.wisc.edu/~craigm/idl/fitting.html)
+ 
+* IRAF (available at http://iraf.noao.edu/)
+* The `WCSTools` package for IRAF (available via ftp as described by http://tdc-www.harvard.edu/software/wcstools/iraf.install.html)
+* The `hectospec` package for IRAF (available at http://tdc-www.harvard.edu/iraf/hectospec/)
 
 ## Installation
 
@@ -143,13 +144,13 @@ Once you have `calloned` working, edit
 Hectosky should be run from the directory with your reduced Hectospec data.  
 To start, enter IDL and execute
 
-`IDL$ hectosky,'PointingName'`
+`IDL> hectosky,'PointingName'`
 
 (As before, `PointingName` is the name you gave to the Hectospec pointing.)
 
 Optionally, you can execute
 
-`IDL$ hectosky,'PointingName',/quick`
+`IDL> hectosky,'PointingName',/quick`
 
 to tell the program to proceed without stopping to review the sky subtraction
 of individual objects.  It will not be entirely automatic, as there is an
@@ -308,7 +309,7 @@ lower-resolution 270 gpm spectra.  If you answer `n` to the question
 
 a SPLOT window will open up, where you can manually refit the line,
 again using the 'd' key and subsequent commands.  When you quit out of
-SPLOT, Hectosky will refit the H&alpha; line based on your fit and
+SPLOT, Hectosky will refit the H&alpha; line using the SPLOT fit as an initial guess, then replot and
 repeat its question.  If you are satisfied with the fit to the H&alpha;
 line in the master sky at this point, the program will move on to the rest of the
 nebular lines.
@@ -435,20 +436,20 @@ is given in the file header.
 
 ## Variations
 
-There are three alternate versions of Hectosky: Hectosky_N2fix, Hectosky_Orion, and
-Hectosky_single.  
+There are three alternate versions of Hectosky: Hectosky_N2fix, Hectosky_S2comp, and
+Hectosky_one.  
 
 **Hectosky_N2fix** fixes the
 wavelength of the [NII] &lambda; 6547 line during fitting.  Occasionally, 
 this line is clearly visible in the master sky, but the program has trouble fitting it.  Hectosky_N2fix corrects this problem and should be used in these cases.
 
-**Hectosky_Orion** is optimized for working with spectra from regions like
+**Hectosky_S2comp** is optimized for working with spectra from regions like
 the Orion Nebula, which have some strong nebular lines but minimal [NII]
 emission.  The spectra inHectosky_Orion are plotted so that the [SII]
 lines can be compared to H&alpha;.  Extra caution should be used when
 interpreting apparent H&alpha; emission features. 
 
-**Hectosky_single** does sky subtraction of a *single* fiber from a
+**Hectosky_one** does sky subtraction of a *single* fiber from a
 Hectospec pointing, allowing you to fiddle with the subtraction for 
 a particular object.  Sometimes, the difference in nebular line strength between the sky
 offset and the science spectrum is large enough that the nebular lines
@@ -456,13 +457,13 @@ need to be scaled by some factor to improved sky subtraction.
 Hectosky_single has extra input variables and is
 called by the command:
 
-`IDL$ hectosky_magic,'PointingName',aperture,scalefactor`
+`IDL> hectosky_one,'PointingName',aperture,scalefactor`
 
 where `aperture` is the fiber number of the object to be sky-subtracted from
 the pointing `PointingName`, and `scalefactor` is the value by which to
 scale the nebular line strengths.  e.g.,
 
-`IDL$ hectosky_magic,'W3_2011C_bright_1',135,1.3`
+`IDL> hectosky_magic,'W3_2011C_bright_1',135,1.3`
 
 It is recommended that you use Hectosky_single only (1) on particularly
 interesting sources, because it can get quite tedious, and (2)
