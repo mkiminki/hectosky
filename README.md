@@ -201,7 +201,7 @@ in your working directory, Hectosky will ask
 
 Again, if you answer `n`, the existing file will be deleted.
 
-#### GetGoodSky
+#### GetGoodSky & creating the master sky
 
 Hectosky calls its companion program, GetGoodSky, to check the
 sky fibers and screen out ones that cannot be used (e.g., because they
@@ -293,3 +293,62 @@ and returns control to Hectosky.
 Hectosky then makes a median master sky out of the good sky fibers, scaling
 by exposure time where necessary.  The master sky is saved as 
 `PointingName.mastersky.fits`.
+
+#### Fitting nebular lines in the master sky
+
+Next, Hectosky fits the nebular sky emission lines in the master sky,
+starting with H&alpha;.  The fitting routine sometimes has trouble
+getting the H&alpha;fit right the first time, especially for the
+lower-resolution 270 gpm spectra.  If you answer `n` to the question
+
+`Use this fit to the H-alpha line? (y/n) `
+
+a SPLOT window will open up, where you can manually refit the line,
+again using the 'd' key and subsequent commands.  When you quit out of
+SPLOT, Hectosky will refit the H&alpha; line based on your fit and
+repeat its question.  If you are satisfied with the fit to the H&alpha;
+line in the master sky at this point, the program will move on to the rest of the
+nebular lines.
+
+Hectosky will try to fit all of the following lines that fall within
+the wavelength range of your spectra:
+
+- H&alpha;, H&beta;
+- [NII] &lambda;&lambda; 6547, 6584
+- [SII] &lambda;&lambda; 6717, 6731
+- [ArIII] &lambda; 7135
+- He I &lambda;&lambda; 5876, 6678, 7065
+- [OIII] &lambda;&lambda; 4959, 5007
+
+Except for H&alpha;, you do not have the option to refit these lines.
+If the fit is poor or the line does not clearly appear in the master
+sky spectrum, answering `n` to
+
+`Include the fit to this line? (y/n)`
+
+means that line will not be fit as a nebular line for sky subtraction.
+
+NOTE: Pay careful attention to the dotted vertical line showing the
+expected central wavelength for the line in question.  If the line is
+very small, sometimes Hectosky will fit to a nearby sky emission line, 
+and the fit will look good, but be wrong.
+
+ALSO NOTE: At the resolution of Hectospec, the emission lines are not
+always perfectly Gaussian.  Do not worry if there is a slight
+deviation or if the Gaussian fit appears to have a slightly higher
+peak flux than the line in the master sky.  This effect will
+largely be cancelled out by the second line fitting later in the
+program.
+
+After going through the nebular line fits, Hectosky plots the master
+sky spectrum with all including nebular line fits overplotted.  The
+TOP panel shows the full wavelength range, while the BOTTOM panel
+zooms in on the 6500-6800 &#x212b; region to emphasize the H&alpha;, [NII],
+and [SII] fits.  The terminal will say: 
+
+```
+When you have finished reviewing the master sky, 
+hit ENTER to continue to sky subtraction of individual spectra. 
+```
+
+
