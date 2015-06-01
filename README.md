@@ -351,4 +351,69 @@ When you have finished reviewing the master sky,
 hit ENTER to continue to sky subtraction of individual spectra. 
 ```
 
+#### Reviewing the sky subtraction
 
+Hectosky performs sky subtraction on all object spectra *and* on all dedicated
+sky fibers from the science exposures (but not for the spectra from
+sky offset exposures).  The latter are included as a
+way to check the accuracy of the sky subtraction (i.e., a
+sky-subtracted sky should be basically a flat line at zero counts).
+
+For each spectrum, the IDL terminal prints
+
+```
+This is: name
+Hit ENTER to continue to the next object.
+```
+
+where "name" is "sky" for a dedicated sky fiber and the object name/ID for 
+a science source.
+
+All of the other information about the sky subtraction is contained in
+the large IDL plot window, which is labeled with the aperture number
+(for those who, like me, use fiber numbers to keep track of spectra
+from a certain night).  The window has four plots, all of which have
+wavelength on the x-axis and counts on the y-axis.
+
+The plots on the LEFT show the sky spectrum associated with this
+object ("associated" means either the sky offset for that fiber, or,
+if that sky was deemed unusable, the nearest sky fiber on the sky).
+The actual observed sky spectrum is plotted in **white**, while the
+"synthetic sky," composed of the master sky + nebular emission lines
+specifically fit to this sky, is in **red**.  The **green** line is the
+residual and should be flat and close to zero except for cosmic rays.
+
+The plots on the RIGHT show the object spectrum, in **white** before sky
+subtraction and in **teal** after.
+
+To evaluate the sky subtraction, first look at the plots on the LEFT.
+Is the **green** line (the difference between the real and synthetic
+skies) flat and close to zero?  Check the BOTTOM LEFT panel to see if
+there were any problems in fitting the H&alpha; and [NII] lines.  If
+you screened the sky fibers carefully, there shouldn't be too many
+problems, but occasionally sometime weird slips through.  A low-level,
+double-peaked pattern in the center of the lines in the residual is
+normal; it is caused by the nebular lines not being perfect Gaussians
+at the resolution of Hectospec.
+
+Next, look at the plots on the RIGHT.  Check the TOP RIGHT plot for
+the overall sky-subtracted spectrum.  For faint stars, verify that you
+can actually see the stellar continuum.  For all stars, check for any
+strange features in the **teal** (sky-subtracted) spectrum.  Emission
+spikes may remain at 5577, 6300, and 6363 &#x212b;: these are [OI] auroral
+lines and vary too rapidly with time to be accurately removed in fiber
+spectra.
+
+The BOTTOM RIGHT panel shows a close-up of the object spectrum around
+the H&alpha; line.  Note that the two BOTTOM plots are on the same
+scale, allowing you to compare the magnitude of the sky H&alpha; with
+the size of any features in the object spectrum.  Look particularly at
+the [NII] lines.  For nebular emission, the [NII] line strengths scale
+fairly closely with the H&alpha; line strength.  For stellar spectra in which you
+do not expect any [NII] absorption or emission, you can therefore
+use any residual [NII] in the stellar spectrum to help you understand
+any residual H&alpha;  If there appear to be [NII] absorption lines,
+the H&alpha; line is oversubtracted: the real line in the object is not
+as deep as it appears.  If there appear to be [NII] emission lines, the H&alpha; line
+is undersubtracted and you should be cautious about interpreting any
+apparent H&alpha; emission.  
