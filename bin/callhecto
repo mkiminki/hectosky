@@ -1,0 +1,12 @@
+#!/iraf/iraf/bin.linux64/ecl.e -f
+
+set	arch		= .linux64
+
+# Load needed packages.
+hectospec
+
+{
+	# Execute the command.  
+	printf ("%s\n", args) | cl()
+	logout
+}

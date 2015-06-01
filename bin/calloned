@@ -1,0 +1,14 @@
+#!/iraf/iraf/bin.linux64/ecl.e -f
+
+# Set required variables. 
+set	arch		= .linux64
+
+# Load needed packages.
+noao
+onedspec
+
+{
+	# Execute the command.  
+	printf ("%s\n", args) | cl()
+	logout
+}
