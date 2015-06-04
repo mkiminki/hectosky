@@ -475,3 +475,8 @@ have a good feel for what "good" sky subtraction looks like.
 Copyright 2012, 2015 Megan Kiminki
 
 Released under the terms of the MIT license.  See the `LICENSE` file for details.
+
+## Acknowledgments
+
+Hectosky was developed with support from the National Science Foundation
+through Astronomy and Astrophysics Research Grant AST-0907980.
