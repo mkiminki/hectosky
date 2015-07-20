@@ -13,6 +13,9 @@ pro getgoodsky,pointname,goodskylist,grating
 ;
 ; MODIFICATION HISTORY: 
 ;          2012 Megan M. Kiminki -- Program created.
+;          2015 Megan M. Kiminki -- Fixed conversion of header
+;                                   keywords to wavelength for general
+;                                   case.
 
 
 ; SOME THINGS FOR PLOTTING.  
@@ -124,7 +127,8 @@ for jj=0,nkeep-1 do begin
    npix = sxpar(header,'NAXIS1')
    dispersion = sxpar(header,'CDELT1')
    lambda_start = sxpar(header,'CRVAL1')
-   wavel = findgen(npix)*dispersion + lambda_start
+   pix_start = sxpar(header,'CRPIX1')
+   wavel = (findgen(npix)+1-pix_start)*dispersion + lambda_start
 
    ; Select the wavelength range to be used as the continuum.  
    ; The default is between 5150 and 5400 Angstroms, because this
@@ -275,7 +279,8 @@ for jj = 0,nkeep-1 do begin
       npix = sxpar(header,'NAXIS1')
       dispersion = sxpar(header,'CDELT1')
       lambda_start = sxpar(header,'CRVAL1')
-      wavel = findgen(npix)*dispersion + lambda_start
+      pix_start = sxpar(header,'CRPIX1')
+      wavel = (findgen(npix)+1-pix_start)*dispersion + lambda_start
 
       ; Plot spectrum for inspection.
       window,0,title='IDL: Flagged Spectrum'

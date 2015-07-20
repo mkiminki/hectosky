@@ -18,6 +18,9 @@ pro hectosky_one,pointname,myap,myscale,quick=quick
 ;                        the individual object spectra.  
 ; MODIFICATION HISTORY: 
 ;           2012 Megan M. Kiminki -- Program created.
+;           2015 Megan M. Kiminki -- Fixed conversion of header
+;                                    keywords to wavelength for general
+;                                    case.
 
 
 ; CLEAR THE TERMINAL SCREEN.  
@@ -379,8 +382,8 @@ master_sky = mrdfits(masterskyfile,0,header,/silent)
 npix = sxpar(header,'NAXIS1')
 dispersion = sxpar(header,'CDELT1')
 lambda_start = sxpar(header,'CRVAL1')
-wavel = findgen(npix)*dispersion + lambda_start
-
+pix_start = sxpar(header,'CRPIX1')
+wavel = (findgen(npix)+1-pix_start)*dispersion + lambda_start
 
 
 
@@ -712,8 +715,9 @@ for jj=iwant[0],iwant[0] do begin
    npix = sxpar(header,'NAXIS1')
    dispersion = sxpar(header,'CDELT1')
    lambda_start = sxpar(header,'CRVAL1')
+   pix_start = sxpar(header,'CRPIX1')
    ; Calculate wavlength for this sky spectrum.  
-   this_wavel = findgen(npix)*dispersion + lambda_start
+   this_wavel = (findgen(npix)+1-pix_start)*dispersion + lambda_start
    ; Interpolate nearest sky spectrum to the same wavelength 
    ; grid as the master sky.  
    real_sky_temp = interpol(real_sky,this_wavel,wavel)
@@ -798,8 +802,9 @@ for jj=iwant[0],iwant[0] do begin
    npix = sxpar(header_obj,'NAXIS1')
    dispersion = sxpar(header_obj,'CDELT1')
    lambda_start = sxpar(header_obj,'CRVAL1')
+   pix_start = sxpar(header,'CRPIX1')
    ; Calculate wavelength grid for object.  
-   wavel_obj = findgen(npix)*dispersion + lambda_start
+   wavel_obj = (findgen(npix)+1-pix_start)*dispersion + lambda_start
    
    ; Interpolate synthetic sky to same wavelength grid as object.  
    synth_sky_temp = interpol(synth_sky,wavel,wavel_obj)
