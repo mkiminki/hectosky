@@ -436,16 +436,16 @@ is given in the file header.
 
 ## Variations
 
-There are three alternate versions of Hectosky: Hectosky_N2fix, Hectosky_S2comp, and
+There are three alternate versions of Hectosky: Hectosky_n2fix, Hectosky_s2comp, and
 Hectosky_one.  
 
-**Hectosky_N2fix** fixes the
+**Hectosky_n2fix** fixes the
 wavelength of the [NII] &lambda; 6547 line during fitting.  Occasionally, 
-this line is clearly visible in the master sky, but the program has trouble fitting it.  Hectosky_N2fix corrects this problem and should be used in these cases.
+this line is clearly visible in the master sky, but the program has trouble fitting it.  Hectosky_n2fix corrects this problem and should be used in these cases.
 
-**Hectosky_S2comp** is optimized for working with spectra from regions like
+**Hectosky_s2comp** is optimized for working with spectra from regions like
 the Orion Nebula, which have some strong nebular lines but minimal [NII]
-emission.  The spectra inHectosky_Orion are plotted so that the [SII]
+emission.  The spectra in Hectosky_s2comp are plotted so that the [SII]
 lines can be compared to H&alpha;.  Extra caution should be used when
 interpreting apparent H&alpha; emission features. 
 
@@ -454,7 +454,7 @@ Hectospec pointing, allowing you to fiddle with the subtraction for
 a particular object.  Sometimes, the difference in nebular line strength between the sky
 offset and the science spectrum is large enough that the nebular lines
 need to be scaled by some factor to improved sky subtraction.  
-Hectosky_single has extra input variables and is
+Hectosky_one has extra input variables and is
 called by the command:
 
 `IDL> hectosky_one,'PointingName',aperture,scalefactor`
@@ -463,9 +463,9 @@ where `aperture` is the fiber number of the object to be sky-subtracted from
 the pointing `PointingName`, and `scalefactor` is the value by which to
 scale the nebular line strengths.  e.g.,
 
-`IDL> hectosky_magic,'W3_2011C_bright_1',135,1.3`
+`IDL> hectosky_one,'W3_2011C_bright_1',135,1.3`
 
-It is recommended that you use Hectosky_single only (1) on particularly
+It is recommended that you use Hectosky_one only (1) on particularly
 interesting sources, because it can get quite tedious, and (2)
 when you are comfortable with using the basic version of Hectosky and
 have a good feel for what "good" sky subtraction looks like.
