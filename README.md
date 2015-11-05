@@ -10,7 +10,7 @@ with the multi-fiber spectrograph [Hectospec](http://www.mmto.org/node/55).  Hec
 subtraction of spatially-variable nebular emission lines while
 minimizing the noise introduced by subtracting the sky emission lines.
 
-HECTOSKY is designed to be run after the E-SPECROAD data reduction
+Hectosky is currently optimized to be run after the E-SPECROAD data reduction
 pipeline, which was written by Juan Cabanela at Minnesota State University 
 and is available at:
 
@@ -35,7 +35,7 @@ Questions and bug reports should be directed to Megan Kiminki at
 
 ## Sky Subtraction Outline
 
-What Hectosky does, in brief:
+What Hectosky does, in brief (see also the summary in [Kiminki et al. 2015](http://adsabs.harvard.edu/abs/2015ApJ...813...42K)):
 
 1. Screens sky fibers for any usuable skies (e.g. sky fibers that
 landed on a star).
@@ -475,6 +475,8 @@ have a good feel for what "good" sky subtraction looks like.
 Copyright 2012, 2015 Megan Kiminki
 
 Released under the terms of the MIT license.  See the `LICENSE` file for details.
+
+If you find Hectosky to be useful in your research, please cite [Kiminki et al. 2015, ApJ, 813, 42](http://adsabs.harvard.edu/abs/2015ApJ...813...42K).
 
 ## Acknowledgments
 
