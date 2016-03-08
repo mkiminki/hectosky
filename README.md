@@ -35,7 +35,7 @@ Questions and bug reports should be directed to Megan Kiminki at
 
 ## Sky Subtraction Outline
 
-What Hectosky does, in brief (see also the summary in [Kiminki et al. 2015](http://adsabs.harvard.edu/abs/2015ApJ...813...42K)):
+What Hectosky does, in brief (see also the summary on [my website](http://spockprime.as.arizona.edu/~megan/code/hectosky.html) and in [Kiminki et al. 2015](http://adsabs.harvard.edu/abs/2015ApJ...813...42K)):
 
 1. Screens sky fibers for any usuable skies (e.g. sky fibers that
 landed on a star).
